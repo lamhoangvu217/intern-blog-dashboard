@@ -6,3 +6,6 @@
 
 ## Backend
 * Supabase REST Api
+
+## Features
+* Manage Posts, Categories and Authors (CRUD)
