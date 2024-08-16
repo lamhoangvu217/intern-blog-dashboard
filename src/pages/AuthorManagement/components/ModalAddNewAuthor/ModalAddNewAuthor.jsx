@@ -6,25 +6,31 @@ import toast from "react-hot-toast";
 function ModalAddNewAuthor({
   openAddNewAuthorModal,
   setOpenAddNewAuthorModal,
+  getAuthorList,
 }) {
   const [authorName, setAuthorName] = useState("");
   const [authorJob, setAuthorJob] = useState("");
+  const [authorAvatar, setAuthorAvatar] = useState("");
   const [isAddLoading, setIsAddLoading] = useState("");
   const handleAuthorNameChange = (value) => {
     setAuthorName(value);
   };
-  const handleAuthorNoteChange = (value) => {
+  const handleAuthorJobChange = (value) => {
     setAuthorJob(value);
+  };
+  const handleAuthorAvatarChange = (value) => {
+    setAuthorAvatar(value);
   };
   const handleAddNewAuthor = async () => {
     setIsAddLoading(true);
-    if (authorName === "" || authorJob === "") {
+    if (authorName === "" || authorJob === "" || authorAvatar === "") {
       toast.error("Điền đầy đủ thông tin trước khi thêm mới");
       return;
     }
     const body = {
       author_name: authorName,
       job_title: authorJob,
+      avatar: authorAvatar,
     };
     const response = await axios.post(
       `${import.meta.env.VITE_SUPABASE_URL}/authors`,
@@ -70,13 +76,30 @@ function ModalAddNewAuthor({
               id="job_title"
               placeholder="Job"
               type="text"
-              onChange={(event) => handleAuthorNoteChange(event.target.value)}
+              onChange={(event) => handleAuthorJobChange(event.target.value)}
+            />
+          </div>
+          <div>
+            <div className="mb-2 block">
+              <Label htmlFor="avatar" value="Avatar" />
+            </div>
+            <TextInput
+              id="avatar"
+              placeholder="Link avatar here"
+              type="text"
+              onChange={(event) => handleAuthorAvatarChange(event.target.value)}
             />
           </div>
         </form>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={handleAddNewAuthor} isProcessing={isAddLoading}>
+        <Button
+          onClick={async () => {
+            await handleAddNewAuthor();
+            await getAuthorList();
+          }}
+          isProcessing={isAddLoading}
+        >
           Thêm mới
         </Button>
         <Button color="gray" onClick={() => setOpenAddNewAuthorModal(false)}>

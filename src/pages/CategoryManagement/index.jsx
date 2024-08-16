@@ -8,7 +8,9 @@ import axios from "axios";
 function CategoryManagement({ getCategoryList }) {
   const [openAddNewModal, setOpenAddNewModal] = useState(false);
   const [categoryList, setCategoryList] = useState([]);
+  // const [isAddLoading, setIsAddLoading] = useState(false);
   async function getCategoryList() {
+    // setIsAddLoading(true);
     const response = await axios
       .get(`${import.meta.env.VITE_SUPABASE_URL}/categories`, {
         headers: {
@@ -18,6 +20,7 @@ function CategoryManagement({ getCategoryList }) {
       .then((data) => {
         setCategoryList(data.data);
       });
+    // setIsAddLoading(false);
   }
   useEffect(() => {
     getCategoryList();
@@ -30,7 +33,9 @@ function CategoryManagement({ getCategoryList }) {
           <Button onClick={() => setOpenAddNewModal(true)}>
             Thêm mới danh mục
           </Button>
-          <Button onClick={() => getCategoryList()}>Refresh</Button>
+          {/* <Button onClick={() => getCategoryList()} isProcessing={isAddLoading}>
+            Refresh
+          </Button> */}
         </div>
       </div>
 
@@ -38,6 +43,7 @@ function CategoryManagement({ getCategoryList }) {
       <ModalAddNewCategory
         openAddNewModal={openAddNewModal}
         setOpenAddNewModal={setOpenAddNewModal}
+        getCategoryList={getCategoryList}
       />
     </WrapperComponent>
   );

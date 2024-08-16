@@ -4,7 +4,11 @@ import { Button, Label, Modal, TextInput } from "flowbite-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-function ModalAddNewCategory({ openAddNewModal, setOpenAddNewModal }) {
+function ModalAddNewCategory({
+  openAddNewModal,
+  setOpenAddNewModal,
+  getCategoryList,
+}) {
   const [categoryName, setCategoryName] = useState("");
   const [categoryNote, setCategoryNote] = useState("");
   const [isAddLoading, setIsAddLoading] = useState("");
@@ -72,7 +76,13 @@ function ModalAddNewCategory({ openAddNewModal, setOpenAddNewModal }) {
         </form>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={handleAddNewCategory} isProcessing={isAddLoading}>
+        <Button
+          onClick={async () => {
+            await handleAddNewCategory();
+            await getCategoryList();
+          }}
+          isProcessing={isAddLoading}
+        >
           Thêm mới
         </Button>
         <Button color="gray" onClick={() => setOpenAddNewModal(false)}>

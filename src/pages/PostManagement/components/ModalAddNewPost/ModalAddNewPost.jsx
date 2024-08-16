@@ -3,9 +3,14 @@ import { Button, Label, Modal, TextInput } from "flowbite-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-function ModalAddNewPost({ openAddNewPostModal, setOpenAddNewPostModal }) {
+function ModalAddNewPost({
+  openAddNewPostModal,
+  setOpenAddNewPostModal,
+  getPostList,
+}) {
   const [postName, setPostName] = useState("");
   const [postContent, setPostContent] = useState("");
+  const [postThumbnail, setPostThumbnail] = useState("");
   const [isAddLoading, setIsAddLoading] = useState(false);
   const handlePostNameChange = (value) => {
     setPostName(value);
@@ -13,15 +18,19 @@ function ModalAddNewPost({ openAddNewPostModal, setOpenAddNewPostModal }) {
   const handlePostContentChange = (value) => {
     setPostContent(value);
   };
+  const handlePostThumbnailChange = (value) => {
+    setPostThumbnail(value);
+  };
   const handleAddNewPost = async () => {
     setIsAddLoading(true);
-    if (postName === "" || postContent === "") {
+    if (postName === "" || postContent === "" || postThumbnail === "") {
       toast.error("Điền đầy đủ thông tin trước khi thêm mới");
       return;
     }
     const body = {
       title: postName,
       content: postContent,
+      thumbnail: postThumbnail,
     };
 
     const response = await axios.post(
@@ -72,10 +81,29 @@ function ModalAddNewPost({ openAddNewPostModal, setOpenAddNewPostModal }) {
               onChange={(event) => handlePostContentChange(event.target.value)}
             ></TextInput>
           </div>
+          <div>
+            <div className="mb-2 block">
+              <Label htmlFor="thumbnail" value="Thumbnail"></Label>
+            </div>
+            <TextInput
+              id="thumbnail"
+              placeholder="Thumbnail here"
+              type="text"
+              onChange={(event) =>
+                handlePostThumbnailChange(event.target.value)
+              }
+            ></TextInput>
+          </div>
         </form>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={handleAddNewPost} isProcessing={isAddLoading}>
+        <Button
+          onClick={async () => {
+            await handleAddNewPost();
+            await getPostList();
+          }}
+          isProcessing={isAddLoading}
+        >
           Thêm mới
         </Button>
         <Button color="gray" onClick={() => setOpenAddNewPostModal(false)}>

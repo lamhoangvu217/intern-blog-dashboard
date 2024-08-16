@@ -1,4 +1,4 @@
-import { Button } from "flowbite-react";
+import { Button, Label, Modal, TextInput } from "flowbite-react";
 import Heading from "../../components/Heading/Heading";
 import WrapperComponent from "../../layouts/WrapperComponent/WrapperComponent";
 import { useEffect, useState } from "react";
@@ -6,9 +6,11 @@ import PostList from "./components/PostList/PostList";
 import ModalAddNewPost from "./components/ModalAddNewPost/ModalAddNewPost";
 import axios from "axios";
 function PostManagement({ getPostList }) {
+  // const [isAddLoading, setIsAddLoading] = useState(false);
   const [postList, setPostList] = useState([]);
   const [openAddNewPostModal, setOpenAddNewPostModal] = useState(false);
   async function getPostList() {
+    // setIsAddLoading(true);
     const response = await axios
       .get(`${import.meta.env.VITE_SUPABASE_URL}/posts`, {
         headers: {
@@ -16,6 +18,7 @@ function PostManagement({ getPostList }) {
         },
       })
       .then((data) => setPostList(data.data));
+    // setIsAddLoading(false);
   }
   useEffect(() => {
     getPostList();
@@ -28,13 +31,16 @@ function PostManagement({ getPostList }) {
           <Button onClick={() => setOpenAddNewPostModal(true)}>
             Thêm mới bài đăng
           </Button>
-          <Button onClick={() => getPostList()}>Refresh</Button>
+          {/* <Button onClick={() => getPostList()} isProcessing={isAddLoading}>
+            Refresh
+          </Button> */}
         </div>
       </div>
       <PostList postList={postList} />
       <ModalAddNewPost
         openAddNewPostModal={openAddNewPostModal}
         setOpenAddNewPostModal={setOpenAddNewPostModal}
+        getPostList={getPostList}
       />
     </WrapperComponent>
   );
