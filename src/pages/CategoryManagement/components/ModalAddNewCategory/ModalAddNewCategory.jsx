@@ -1,13 +1,14 @@
 /* eslint-disable react/prop-types */
-import axios from "axios";
 import { Button, Label, Modal, TextInput } from "flowbite-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { useAddCategoryMutation } from "../../../../store/slices/categorySlice";
 
 function ModalAddNewCategory({ openAddNewModal, setOpenAddNewModal }) {
   const [categoryName, setCategoryName] = useState("");
   const [categoryNote, setCategoryNote] = useState("");
   const [isAddLoading, setIsAddLoading] = useState("");
+  const [addCategory] = useAddCategoryMutation()
   const handleCategoryNameChange = (value) => {
     setCategoryName(value);
   };
@@ -24,20 +25,11 @@ function ModalAddNewCategory({ openAddNewModal, setOpenAddNewModal }) {
       category_name: categoryName,
       description: categoryNote,
     };
-    const response = await axios.post(
-      `${import.meta.env.VITE_SUPABASE_URL}/categories`,
-      body,
-      {
-        headers: {
-          apikey: import.meta.env.VITE_SUPABASE_API_KEY,
-        },
-      }
-    );
-    if (response.status === 201) {
+    await addCategory(body).unwrap().then(() => {
       toast.success("Thêm mới danh mục thành công");
-    } else {
+    }).catch(() => {
       toast.error("Thêm mới danh mục không thành công");
-    }
+    });
     setIsAddLoading(false);
     setOpenAddNewModal(false);
   };

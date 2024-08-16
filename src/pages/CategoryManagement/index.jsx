@@ -4,24 +4,17 @@ import WrapperComponent from "../../layouts/WrapperComponent/WrapperComponent";
 import CategoryList from "./components/CategoryList/CategoryList";
 import ModalAddNewCategory from "./components/ModalAddNewCategory/ModalAddNewCategory";
 import { useEffect, useState } from "react";
-import axios from "axios";
-function CategoryManagement({ getCategoryList }) {
+import { useGetCategoriesQuery } from "../../store/slices/categorySlice";
+function CategoryManagement() {
   const [openAddNewModal, setOpenAddNewModal] = useState(false);
   const [categoryList, setCategoryList] = useState([]);
-  async function getCategoryList() {
-    const response = await axios
-      .get(`${import.meta.env.VITE_SUPABASE_URL}/categories`, {
-        headers: {
-          apikey: import.meta.env.VITE_SUPABASE_API_KEY,
-        },
-      })
-      .then((data) => {
-        setCategoryList(data.data);
-      });
-  }
+  const { data: categories } = useGetCategoriesQuery();
+
   useEffect(() => {
-    getCategoryList();
-  }, []);
+    if (categories) {
+      setCategoryList(categories);
+    }
+  }, [categories])
   return (
     <WrapperComponent>
       <div className="flex justify-between items-center mb-4">
@@ -30,7 +23,6 @@ function CategoryManagement({ getCategoryList }) {
           <Button onClick={() => setOpenAddNewModal(true)}>
             Thêm mới danh mục
           </Button>
-          <Button onClick={() => getCategoryList()}>Refresh</Button>
         </div>
       </div>
 
