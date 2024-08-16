@@ -4,19 +4,19 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
-import ModalDeleteCategory from "../ModalDeleteCategory/ModalDeleteCategory";
-import ModalUpdateCategory from "../ModalUpdateCategory/ModalUpdateCategory";
-function CategoryList({ categoryList }) {
-  const [activeCategoryId, setActiveCategoryId] = useState(0);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [openUpdateModal, setOpenUpdateModal] = useState(false);
-  const handleOpenDeleteModal = (categoryId) => {
-    setActiveCategoryId(categoryId);
-    setDeleteModalOpen(true);
+import ModalDeletePost from "../ModalDeletePost/ModalDeletePost";
+import ModalUpdatePost from "../ModalUpdatePost/ModalUpdatePost";
+function PostList({ postList }) {
+  const [activePostId, setActivePostId] = useState(0);
+  const [openDeletePostModal, setOpenDeletePostModal] = useState(false);
+  const [openUpdatePostModal, setOpenUpdatePostModal] = useState(false);
+  const handleOpenDeletePostModal = (postId) => {
+    setActivePostId(postId);
+    setOpenDeletePostModal(true);
   };
-  const handleOpenUpdateModal = (categoryId) => {
-    setActiveCategoryId(categoryId);
-    setOpenUpdateModal(true);
+  const handleOpenUpdatePostModal = (postId) => {
+    setActivePostId(postId);
+    setOpenUpdatePostModal(true);
   };
   return (
     <div className="relative overflow-x-auto">
@@ -27,10 +27,10 @@ function CategoryList({ categoryList }) {
               STT
             </th>
             <th scope="col" className="px-6 py-3">
-              Mã danh mục
+              Mã bài đăng
             </th>
             <th scope="col" className="px-6 py-3">
-              Tên danh mục
+              Tên bài đăng
             </th>
             <th scope="col" className="px-6 py-3">
               Ngày tạo
@@ -41,7 +41,7 @@ function CategoryList({ categoryList }) {
           </tr>
         </thead>
         <tbody>
-          {categoryList.map((cate, index) => (
+          {postList.map((cate, index) => (
             <tr
               className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
               key={cate?.id}
@@ -53,7 +53,7 @@ function CategoryList({ categoryList }) {
                 {index + 1}
               </th>
               <td className="px-6 py-4">{cate.id}</td>
-              <td className="px-6 py-4">{cate.category_name}</td>
+              <td className="px-6 py-4">{cate.title}</td>
               <td className="px-6 py-4">
                 {moment(cate.created_at).format("DD/MM/YYYY")}
               </td>
@@ -61,13 +61,13 @@ function CategoryList({ categoryList }) {
                 <Tooltip content="Sửa">
                   <MdEdit
                     className="cursor-pointer"
-                    onClick={() => handleOpenUpdateModal(cate.id)}
+                    onClick={() => handleOpenUpdatePostModal(cate.id)}
                   />
                 </Tooltip>
                 <Tooltip content="Xóa">
                   <FaTrash
                     className="cursor-pointer"
-                    onClick={() => handleOpenDeleteModal(cate.id)}
+                    onClick={() => handleOpenDeletePostModal(cate.id)}
                   />
                 </Tooltip>
               </td>
@@ -75,18 +75,17 @@ function CategoryList({ categoryList }) {
           ))}
         </tbody>
       </table>
-      <ModalDeleteCategory
-        openModal={deleteModalOpen}
-        setOpenModal={setDeleteModalOpen}
-        categoryId={activeCategoryId}
+      <ModalDeletePost
+        openDeletePostModal={openDeletePostModal}
+        setOpenDeletePostModal={setOpenDeletePostModal}
+        postId={activePostId}
       />
-      <ModalUpdateCategory
-        openUpdateModal={openUpdateModal}
-        setOpenUpdateModal={setOpenUpdateModal}
-        categoryId={activeCategoryId}
+      <ModalUpdatePost
+        openUpdatePostModal={openUpdatePostModal}
+        setOpenUpdatePostModal={setOpenUpdatePostModal}
+        postId={activePostId}
       />
     </div>
   );
 }
-
-export default CategoryList;
+export default PostList;
