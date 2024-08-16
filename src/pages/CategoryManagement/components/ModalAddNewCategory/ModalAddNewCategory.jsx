@@ -4,9 +4,10 @@ import { Button, Label, Modal, TextInput } from "flowbite-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-function ModalAddNewCategory({ openModal, setOpenModal }) {
+function ModalAddNewCategory({ openAddNewModal, setOpenAddNewModal }) {
   const [categoryName, setCategoryName] = useState("");
   const [categoryNote, setCategoryNote] = useState("");
+  const [isAddLoading, setIsAddLoading] = useState("");
   const handleCategoryNameChange = (value) => {
     setCategoryName(value);
   };
@@ -14,6 +15,7 @@ function ModalAddNewCategory({ openModal, setOpenModal }) {
     setCategoryNote(value);
   };
   const handleAddNewCategory = async () => {
+    setIsAddLoading(true);
     if (categoryName === "" || categoryNote === "") {
       toast.error("Điền đầy đủ thông tin trước khi thêm mới");
       return;
@@ -36,10 +38,12 @@ function ModalAddNewCategory({ openModal, setOpenModal }) {
     } else {
       toast.error("Thêm mới danh mục không thành công");
     }
+    setIsAddLoading(false);
+    setOpenAddNewModal(false);
   };
 
   return (
-    <Modal show={openModal} onClose={() => setOpenModal(false)}>
+    <Modal show={openAddNewModal} onClose={() => setOpenAddNewModal(false)}>
       <Modal.Header>Thêm mới danh mục</Modal.Header>
       <Modal.Body>
         <form className="flex flex-col gap-4">
@@ -68,8 +72,10 @@ function ModalAddNewCategory({ openModal, setOpenModal }) {
         </form>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={handleAddNewCategory}>Thêm mới</Button>
-        <Button color="gray" onClick={() => setOpenModal(false)}>
+        <Button onClick={handleAddNewCategory} isProcessing={isAddLoading}>
+          Thêm mới
+        </Button>
+        <Button color="gray" onClick={() => setOpenAddNewModal(false)}>
           Hủy
         </Button>
       </Modal.Footer>

@@ -4,19 +4,19 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
-import ModalDeleteCategory from "../ModalDeleteCategory/ModalDeleteCategory";
-import ModalUpdateCategory from "../ModalUpdateCategory/ModalUpdateCategory";
-function CategoryList({ categoryList }) {
-  const [activeCategoryId, setActiveCategoryId] = useState(0);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [openUpdateModal, setOpenUpdateModal] = useState(false);
-  const handleOpenDeleteModal = (categoryId) => {
-    setActiveCategoryId(categoryId);
-    setDeleteModalOpen(true);
+import ModalDeleteAtuthor from "../ModalDeleteAuthor/ModalDeleteAuthor";
+import ModalUpdateAuthor from "../ModalUpdateAuthor/ModalUpdateAuthor";
+function AuthorList({ authorList }) {
+  const [activeAuthorId, setActiveAuthorId] = useState(0);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [openUpdateAuthorModal, setOpenUpdateAuthorModal] = useState(false);
+  const handleOpenDeleteModal = (authorId) => {
+    setActiveAuthorId(authorId);
+    setOpenDeleteModal(true);
   };
-  const handleOpenUpdateModal = (categoryId) => {
-    setActiveCategoryId(categoryId);
-    setOpenUpdateModal(true);
+  const handleOpenUpdateAuthorModal = (authorId) => {
+    setActiveAuthorId(authorId);
+    setOpenUpdateAuthorModal(true);
   };
   return (
     <div className="relative overflow-x-auto">
@@ -27,10 +27,10 @@ function CategoryList({ categoryList }) {
               STT
             </th>
             <th scope="col" className="px-6 py-3">
-              Mã danh mục
+              Mã tác giả
             </th>
             <th scope="col" className="px-6 py-3">
-              Tên danh mục
+              Tên tác giả
             </th>
             <th scope="col" className="px-6 py-3">
               Ngày tạo
@@ -41,7 +41,7 @@ function CategoryList({ categoryList }) {
           </tr>
         </thead>
         <tbody>
-          {categoryList.map((cate, index) => (
+          {authorList.map((cate, index) => (
             <tr
               className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
               key={cate?.id}
@@ -53,7 +53,7 @@ function CategoryList({ categoryList }) {
                 {index + 1}
               </th>
               <td className="px-6 py-4">{cate.id}</td>
-              <td className="px-6 py-4">{cate.category_name}</td>
+              <td className="px-6 py-4">{cate.author_name}</td>
               <td className="px-6 py-4">
                 {moment(cate.created_at).format("DD/MM/YYYY")}
               </td>
@@ -61,7 +61,7 @@ function CategoryList({ categoryList }) {
                 <Tooltip content="Sửa">
                   <MdEdit
                     className="cursor-pointer"
-                    onClick={() => handleOpenUpdateModal(cate.id)}
+                    onClick={() => handleOpenUpdateAuthorModal(cate.id)}
                   />
                 </Tooltip>
                 <Tooltip content="Xóa">
@@ -75,18 +75,17 @@ function CategoryList({ categoryList }) {
           ))}
         </tbody>
       </table>
-      <ModalDeleteCategory
-        openModal={deleteModalOpen}
-        setOpenModal={setDeleteModalOpen}
-        categoryId={activeCategoryId}
+      <ModalDeleteAtuthor
+        openDeleteModal={openDeleteModal}
+        setOpenDeleteModal={setOpenDeleteModal}
+        authorId={activeAuthorId}
       />
-      <ModalUpdateCategory
-        openUpdateModal={openUpdateModal}
-        setOpenUpdateModal={setOpenUpdateModal}
-        categoryId={activeCategoryId}
+      <ModalUpdateAuthor
+        openUpdateAuthorModal={openUpdateAuthorModal}
+        setOpenUpdateAuthorModal={setOpenUpdateAuthorModal}
+        authorId={activeAuthorId}
       />
     </div>
   );
 }
-
-export default CategoryList;
+export default AuthorList;
